@@ -22,6 +22,12 @@ board = [
     # [0, 0, 0],
 ]
 
+moves = {
+    # 1: [0, 0], 2: [0, 1], 3: [0, 2],
+    # 4: [1, 0], 5: [1, 1], 6: [1, 2],
+    # 7: [2, 0], 8: [2, 1], 9: [2, 2],
+}
+grilles = 0
 
 def evaluate(state):
     """
@@ -50,7 +56,7 @@ def wins(state, player):
     :return: True if the player wins
     """
     win_state = [
-        [state[0][0], state[0][1], state[0][2]],
+        [state[0][0], state[0][1], state[0][2]], # possibilité de victoire 
         [state[1][0], state[1][1], state[1][2]],
         [state[2][0], state[2][1], state[2][2]],
         [state[0][0], state[1][0], state[2][0]],
@@ -226,19 +232,15 @@ def human_turn(c_choice, h_choice):
 
     # Dictionary of valid moves
     move = -1
-    moves = {
-        1: [0, 0], 2: [0, 1], 3: [0, 2],
-        4: [1, 0], 5: [1, 1], 6: [1, 2],
-        7: [2, 0], 8: [2, 1], 9: [2, 2],
-    }
+    
 
     clean()
     print(f'Human turn [{h_choice}]')
     render(board, c_choice, h_choice)
-
-    while move < 1 or move > 9:
+    movespossible = "Use numpad 1.." + str(grilles*grilles) + ": "
+    while move < 1 or move > (grilles*grilles):
         try:
-            move = int(input('Use numpad (1..9): '))
+            move = int(input(movespossible))
             coord = moves[move]
             can_move = set_move(coord[0], coord[1], HUMAN)
 
@@ -252,6 +254,15 @@ def human_turn(c_choice, h_choice):
             print('Bad choice')
 
 
+def gen_moves(lenght):
+    pos = 1
+    for i in range(lenght):
+        for j in range(lenght):
+            moves[pos] = [i, j]
+            pos += 1
+  
+    return moves
+
 def main():
     """
     Main function that calls all functions
@@ -260,7 +271,7 @@ def main():
     h_choice = ''  # X or O
     c_choice = ''  # X or O
     first = ''  # if human is the first
-    grilles = 2 # the dimension of grilles
+    global grilles# the dimension of grilles
 
     # Human cooses the dimension of board
     while grilles % 2 == 0:
@@ -279,6 +290,9 @@ def main():
         for l in range(grilles):
             largeur.append(0)
         board.append(largeur)
+
+    moves = gen_moves(grilles)
+
 
 
     # Human chooses X or O to play

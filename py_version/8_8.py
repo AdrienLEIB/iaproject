@@ -9,11 +9,11 @@ COMP = +1
 board = [
     [0, 0, 0, 0, 0],
     [0, 0, 0, -1, 0],
-    [0, 0, 0, 0, 0],
+    [0, 0, -1, 0, 0],
     [0, -1, 0, 0, 0],
-    [-1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
 ]
-
+win_state = []
 moves = {
     # 1: [0, 0], 2: [0, 1], 3: [0, 2],
     # 4: [1, 0], 5: [1, 1], 6: [1, 2],
@@ -40,6 +40,17 @@ def clean():
 #    y
 
 
+def create_win_state(state):
+    """
+    """
+    global win_state
+    for iy in range(len(state)):
+        for ix in range(len(state[iy])):
+            #print(f'pos {iy} _ {ix}')
+            check_all_direction(state, iy, ix)
+            print(state[iy][ix])
+    print(win_state)
+
 
 def wins(state, player):
     """
@@ -52,14 +63,14 @@ def wins(state, player):
     :return: True if the player wins
     """
     win_state = [
-        [state[0][0], state[0][1], state[0][2]], # possibilité de victoire 
-        [state[1][0], state[1][1], state[1][2]],
-        [state[2][0], state[2][1], state[2][2]],
-        [state[0][0], state[1][0], state[2][0]],
-        [state[0][1], state[1][1], state[2][1]],
-        [state[0][2], state[1][2], state[2][2]],
-        [state[0][0], state[1][1], state[2][2]],
-        [state[2][0], state[1][1], state[0][2]],
+        # [state[0][0], state[0][1], state[0][2]], # possibilité de victoire 
+        # [state[1][0], state[1][1], state[1][2]],
+        # [state[2][0], state[2][1], state[2][2]],
+        # [state[0][0], state[1][0], state[2][0]],
+        # [state[0][1], state[1][1], state[2][1]],
+        # [state[0][2], state[1][2], state[2][2]],
+        # [state[0][0], state[1][1], state[2][2]],
+        # [state[2][0], state[1][1], state[0][2]],
     ]
     if [player, player, player] in win_state:
         return True
@@ -70,58 +81,55 @@ def wins(state, player):
 def check_all_direction(state, posy, posx):
     """
     """
+    global win_state
+    win_state.append(check_at_the_right(state, posy, posx))
 
-    win_sate = []
-    print("initiale right verification ...")
-    right = check_at_the_right(state, posy, posx)
-    win_sate.append(check_at_the_right(state, posy, posx))
-
-    print(f'result : {right}')
-    print("initiale left verification ...")
-    left = check_at_the_left(state, posy, posx)
-    win_sate.append(check_at_the_left(state, posy, posx))
+    # print(f'result : {right}')
+    # print("initiale left verification ...")
+    # left = check_at_the_left(state, posy, posx)
+    # win_sate.append(check_at_the_left(state, posy, posx))
 
 
-    print(f'result : {left}')
-    print("initiale top verification ...")
-    top = check_at_the_top(state, posy, posx)
-    win_sate.append(check_at_the_top(state, posy, posx))
-    print(f'result : {top}')
+    # print(f'result : {left}')
+    # print("initiale top verification ...")
+    # top = check_at_the_top(state, posy, posx)
+    # win_sate.append(check_at_the_top(state, posy, posx))
+    # print(f'result : {top}')
 
 
 
-    print("initiale bot verification ...")
-    bot = check_at_the_bot(state, posy, posx)
-    print(f'result : {bot}')
-    win_sate.append(check_at_the_bot(state, posy, posx))
+    # print("initiale bot verification ...")
+    # bot = check_at_the_bot(state, posy, posx)
+    # print(f'result : {bot}')
+    # win_sate.append(check_at_the_bot(state, posy, posx))
 
-    print("initiale diago RIGHT TOP verification ...")
-    rt = check_at_the_diagonal_rt(state, posy, posx)
-    print(f'result : {rt}')
-    win_sate.append(check_at_the_diagonal_rt(state, posy, posx))
+    # print("initiale diago RIGHT TOP verification ...")
+    # rt = check_at_the_diagonal_rt(state, posy, posx)
+    # print(f'result : {rt}')
+    # win_sate.append(check_at_the_diagonal_rt(state, posy, posx))
 
-    print("initiale diago RIGHT BOT verification ...")
-    rb = check_at_the_diagonal_rb(state, posy, posx)
-    print(f'result : {rb}')
-    win_sate.append(check_at_the_diagonal_rb(state, posy, posx))
+    # print("initiale diago RIGHT BOT verification ...")
+    # rb = check_at_the_diagonal_rb(state, posy, posx)
+    # print(f'result : {rb}')
+    # win_sate.append(check_at_the_diagonal_rb(state, posy, posx))
 
 
-    print("initiale diago left TOP verification ...")
-    lt = check_at_the_diagonal_lt(state, posy, posx)
-    print(f'result : {lt}')
-    win_sate.append(check_at_the_diagonal_lt(state, posy, posx))
+    # print("initiale diago left TOP verification ...")
+    # lt = check_at_the_diagonal_lt(state, posy, posx)
+    # print(f'result : {lt}')
+    # win_sate.append(check_at_the_diagonal_lt(state, posy, posx))
 
-    print("initiale diago left BOT verification ...")
-    lb = check_at_the_diagonal_lb(state, posy, posx)
-    print(f'result : {lb}')
-    win_sate.append(check_at_the_diagonal_lb(state, posy, posx))
+    # print("initiale diago left BOT verification ...")
+    # lb = check_at_the_diagonal_lb(state, posy, posx)
+    # print(f'result : {lb}')
+    # win_sate.append(check_at_the_diagonal_lb(state, posy, posx))
 
-    print("____________________________________________________")
+    # print("____________________________________________________")
 
-    if True in win_sate:
-        return True
-    else:
-        return False
+    # if True in win_sate:
+    #     return True
+    # else:
+    #     return False
 
 
 
@@ -136,18 +144,13 @@ def gen_possibility_to_win(moves):
 def check_at_the_right(state, posy, posx):
     """
     """
-    value = state[posy][posx]
     checkR = []
     if posx + 3 < grilles:
         for i in range(4):
             checkR.append(state[posy][posx+i])
+        return checkR
     else:
-        return False
-
-    if [value,value,value, value] == checkR:
-        return True
-    else:
-        return False
+        pass
 
 
 
@@ -456,42 +459,43 @@ def main():
     grilles = 5# the dimension of grilles
 
 
+    create_win_state(board)
 
-    moves = gen_moves(grilles)
-
-
-
-    # Human chooses X or O to play
-    while h_choice != 'O' and h_choice != 'X':
-        try:
-            print('')
-            h_choice = input('Choose X or O\nChosen: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Setting computer's choice
-    if h_choice == 'X':
-        c_choice = 'O'
-    else:
-        c_choice = 'X'
-
-    # Human may starts first
-    clean()
-    while first != 'Y' and first != 'N':
-        try:
-            first = input('First to start?[y/n]: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
+    # moves = gen_moves(grilles)
 
 
 
-    human_turn(c_choice, h_choice)
+    # # Human chooses X or O to play
+    # while h_choice != 'O' and h_choice != 'X':
+    #     try:
+    #         print('')
+    #         h_choice = input('Choose X or O\nChosen: ').upper()
+    #     except (EOFError, KeyboardInterrupt):
+    #         print('Bye')
+    #         exit()
+    #     except (KeyError, ValueError):
+    #         print('Bad choice')
+
+    # # Setting computer's choice
+    # if h_choice == 'X':
+    #     c_choice = 'O'
+    # else:
+    #     c_choice = 'X'
+
+    # # Human may starts first
+    # clean()
+    # while first != 'Y' and first != 'N':
+    #     try:
+    #         first = input('First to start?[y/n]: ').upper()
+    #     except (EOFError, KeyboardInterrupt):
+    #         print('Bye')
+    #         exit()
+    #     except (KeyError, ValueError):
+    #         print('Bad choice')
+
+
+
+    # human_turn(c_choice, h_choice)
         # ai_turn(c_choice, h_choice)
 
     # Game over message

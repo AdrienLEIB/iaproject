@@ -22,7 +22,12 @@ board = [
     [0, 0, 0],
 ]
 
-
+moves = {
+    1: [0, 0], 2: [0, 1], 3: [0, 2],
+    4: [1, 0], 5: [1, 1], 6: [1, 2],
+    7: [2, 0], 8: [2, 1], 9: [2, 2],
+}
+    
 def evaluate(state):
     """
     Function to heuristic evaluation of state.
@@ -49,6 +54,16 @@ def wins(state, player):
     :param player: a human or a computer
     :return: True if the player wins
     """
+
+
+   # 0 1 2 3 4
+# 0 | | | | | | -> x
+# 1 | | | | | |
+# 2 | | | | | |
+# 3 | | | | | |
+# 4 | | | | | |
+
+#    y
     win_state = [
         [state[0][0], state[0][1], state[0][2]],
         [state[1][0], state[1][1], state[1][2]],
@@ -59,6 +74,9 @@ def wins(state, player):
         [state[0][0], state[1][1], state[2][2]],
         [state[2][0], state[1][1], state[0][2]],
     ]
+    print(win_state)
+    time.sleep(2)
+    print([player, player, player])
     if [player, player, player] in win_state:
         return True
     else:
@@ -224,11 +242,7 @@ def human_turn(c_choice, h_choice):
 
     # Dictionary of valid moves
     move = -1
-    moves = {
-        1: [0, 0], 2: [0, 1], 3: [0, 2],
-        4: [1, 0], 5: [1, 1], 6: [1, 2],
-        7: [2, 0], 8: [2, 1], 9: [2, 2],
-    }
+
 
     clean()
     print(f'Human turn [{h_choice}]')
