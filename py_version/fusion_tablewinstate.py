@@ -320,7 +320,6 @@ def human_turn(c_choice, h_choice):
             move = int(input(movespossible))
             coord = moves[move]
             can_move = set_move(coord[0], coord[1], HUMAN)
-            print("")
             if not can_move:
                 print('Bad move')
                 move = -1
