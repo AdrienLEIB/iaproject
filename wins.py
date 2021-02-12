@@ -1,8 +1,8 @@
 board = [
-    [0, 1, 0, 0, 0],
-    [1, 1, 1, 0, 1],
-    [0, 1, 0, 1, 1],
-    [0, 0, 1, 0, 0],
+    [1, 1, 0, 0, 1],
+    [1, 0, 1, 1, 0],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 0],
     [0, 0, 0, 0, 0]
 ]
 
@@ -37,10 +37,9 @@ def check_diago_right(state, posx, posy, player):
         x -= 1
         y += 1
     
-    while((y -3) > 0 or (x + 3) < (len(state)-1)):
-        line = [state[y][x], state[x+1][y-1], state[x+2][y-2], state[x+3][y-3]]
+    while((y -3) > 0 and (x + 3) <= (len(state)-1)):
+        line = [state[x][y], state[x+1][y-1], state[x+2][y-2], state[x+3][y-3]]
         if [player, player, player, player] == line:
-            print('right: ', line, True)
             return True
         x += 1
         y -= 1
@@ -56,10 +55,9 @@ def check_diago_left(state, posx, posy, player):
         x -= 1
         y -= 1
 
-    while( (y + 4) < (len(state)-1) or (x + 4) < (len(state)-1)):
-        line = [state[y][x], state[x+1][y+1], state[x+2][y+2], state[x+3][y+3]]
+    while( (y + 3) <= (len(state)-1) and (x + 3) <= (len(state)-1)):
+        line = [state[x][y], state[x+1][y+1], state[x+2][y+2], state[x+3][y+3]]
         if [player, player, player, player] == line:
-            print('left: ', line)
             return True
         y += 1
         x += 1
@@ -68,8 +66,10 @@ def check_diago_left(state, posx, posy, player):
 
 
 def main():
-    last_move = [0, 0]
+    last_move = [1, 3]
     player = 1
+
+
     print(wins(board, last_move, player))
 
 
