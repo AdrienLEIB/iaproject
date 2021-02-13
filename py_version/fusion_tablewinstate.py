@@ -23,14 +23,14 @@ moves = {
 
 }
 grilles = 0
-
+comboforWin = 0
 
 def check_the_line(state, posx, posy):
     """
     """
     line = []
-    if posy + 3 < grilles:
-        for i in range(4):
+    if posy + (comboforWin-1) < grilles:
+        for i in range(comboforWin):
             line.append(state[posx][posy+i])
         return line
 
@@ -40,10 +40,9 @@ def check_the_line(state, posx, posy):
 def check_the_column(state, posx, posy):
     """
     """
-    value = state[posx][posy]
     column = []
-    if posx + 3 < grilles:
-        for i in range(4):
+    if posx + (comboforWin-1) < grilles:
+        for i in range(comboforWin):
             column.append(state[posx][posy])
             #print(state[posx][posy])
             posx+=1
@@ -57,8 +56,10 @@ def check_diago_bottom(state, posx, posy):
     x = posx
     y = posy
     try:
-        
-        diagoB =  [state[x][y], state[x+1][y+1], state[x+2][y+2], state[x+3][y+3]]
+        if comboforWin == 3:
+            diagoB =  [state[x][y], state[x+1][y+1], state[x+2][y+2]]
+        elif comboforWin == 4:
+            diagoB =  [state[x][y], state[x+1][y+1], state[x+2][y+2], state[x+3][y+3]]
         return diagoB
     except:
         pass
@@ -73,14 +74,23 @@ def check_diago_top(state, posx, posy):
     
         
     try:
-        if x -3 >= 0:
-            diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2], state[x-3][y+3]]
-            return diagoT
+        if x - (comboforWin-1) >= 0 and comboforWin==3:
+            diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2]]
+        elif x - (comboforWin-1) >= 0 and comboforWin==4:
+            diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2],state[x-3][y+3] ]
+        return diagoT
     except:
         pass
     
     return 
 
+
+def genere_params_for_win(grilles):
+    if grilles == 3:
+        comboforWin = 3
+    else:
+        comboforWin = 4
+    return comboforWin
 
 def create_win_possibility(state):
     wins_state = []
@@ -128,16 +138,16 @@ def wins(state, player):
     :param player: a human or a computer
     :return: True if the player wins
     """
-    #win_state = create_win_possibility(state)
-    win_state = [
-        [state[0][0], state[0][1], state[0][2]],
-        [state[1][0], state[1][1], state[1][2]],
-        [state[2][0], state[2][1], state[2][2]],
-        [state[0][0], state[1][0], state[2][0]],
-        [state[0][1], state[1][1], state[2][1]],
-        [state[0][2], state[1][2], state[2][2]],
-        [state[0][0], state[1][1], state[2][2]],
-       ]
+    win_state = create_win_possibility(state)
+    # win_state = [
+    #     [state[0][0], state[0][1], state[0][2]],
+    #     [state[1][0], state[1][1], state[1][2]],
+    #     [state[2][0], state[2][1], state[2][2]],
+    #     [state[0][0], state[1][0], state[2][0]],
+    #     [state[0][1], state[1][1], state[2][1]],
+    #     [state[0][2], state[1][2], state[2][2]],
+    #     [state[0][0], state[1][1], state[2][2]],
+    #    ]
     if [player, player, player] in win_state:
         return True
     else:
@@ -369,6 +379,8 @@ def main():
         board.append(largeur)
     
     moves = gen_moves(grilles)
+    comboforWin = genere_params_for_win(grilles)
+
     while h_choice != 'O' and h_choice != 'X':
         try:
             print('')
