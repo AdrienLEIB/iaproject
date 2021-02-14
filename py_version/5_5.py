@@ -17,9 +17,6 @@ License: GNU GENERAL PUBLIC LICENSE (GPL)
 HUMAN = -1
 COMP = +1
 board = [
-    # [0, 0, 0],
-    # [0, 0, 0],
-    # [0, 0, 0],
 ]
 
 moves = {
@@ -27,7 +24,7 @@ moves = {
     # 4: [1, 0], 5: [1, 1], 6: [1, 2],
     # 7: [2, 0], 8: [2, 1], 9: [2, 2],
 }
-grilles = 0
+grilles = 1
 
 def evaluate(state):
     """
@@ -271,10 +268,10 @@ def main():
     h_choice = ''  # X or O
     c_choice = ''  # X or O
     first = ''  # if human is the first
-    global grilles# the dimension of grilles
+    global grilles # the dimension of grilles
 
     # Human cooses the dimension of board
-    while grilles % 2 == 0:
+    while grilles % 2 == 0 and grilles==1:
         try:
             print('')
             grilles = int(input("Entrez un nombre impair afin de définir la taille de votre grille: "))
