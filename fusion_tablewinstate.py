@@ -81,9 +81,9 @@ def check_diago_top(state, posx, posy):
     
         
     try:
-        if x - (comboforWin-1) >= 0 and comboforWin==3:
+        if x - (comboforWin-1) >= 0 and y + (comboforwin-1) and comboforWin==3:
             diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2]]
-        elif x - (comboforWin-1) >= 0 and comboforWin==4:
+        elif x - (comboforWin-1) >= 0 and y + (comboforwin-1) < grilles and comboforWin==4:
             diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2],state[x-3][y+3] ]
         return diagoT
     except:
