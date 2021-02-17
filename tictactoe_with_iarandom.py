@@ -282,20 +282,8 @@ def ai_turn(c_choice, h_choice):
 
     render(board, c_choice, h_choice)
 
-    move = -1
-
-    while move < 1 or (move > grilles*grilles):
-        try:
-            move = choice(range(grilles*grilles))
-            coord = moves[move]
-            can_move = set_move(coord[0], coord[1], COMP)
-            if not can_move:
-                move = -1
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
+    coord = choice(empty_cells(board))
+    can_move = set_move(coord[0], coord[1], COMP)
     time.sleep(1)
 
 
