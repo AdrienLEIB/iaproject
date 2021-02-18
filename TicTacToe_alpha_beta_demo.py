@@ -15,7 +15,15 @@ chars = {
     0: ' '
 }
 
-board = []
+board = [
+    [+1, +1, +0, +0, +0],
+    [-0, -1, +0, +1, +1],
+    [+0, +0, +1, +0, +0],
+    [+1, -1, +0, -1, +1],
+    [+0, +1, -1, +0, +0],
+]
+
+# board = []
 
 grid_len = 0
 
@@ -246,13 +254,13 @@ def human_turn():
 
 
 def main():
-    clean()
+    """ clean()
     grid_length = int(input('Choose your grid length (5X5), (7X7)...  :  '))
     while grid_length % 2 == 0:
         grid_length = int(input('Choose your grid length (5X5), (7X7)... (odd number)  :  '))
 
     print('initializing the board...\n')
-    init_borad(grid_length)
+    init_borad(grid_length) """
 
     # Human may starts first
     first = ''
