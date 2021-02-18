@@ -17,17 +17,100 @@ License: GNU GENERAL PUBLIC LICENSE (GPL)
 HUMAN = -1
 COMP = +1
 board = [
-    # [0, 0, 0],
-    # [0, 0, 0],
-    # [0, 0, 0],
 ]
 
 moves = {
-    # 1: [0, 0], 2: [0, 1], 3: [0, 2],
-    # 4: [1, 0], 5: [1, 1], 6: [1, 2],
-    # 7: [2, 0], 8: [2, 1], 9: [2, 2],
+
 }
 grilles = 0
+comboforWin = 0
+
+
+def genere_params_for_win(grilles):
+    if grilles == 3:
+        comboforWin = 3
+    else:
+        comboforWin = 4
+    return comboforWin
+
+def check_the_line(state, posx, posy):
+    """
+    """
+    line = []
+    if posy + (comboforWin-1) < grilles:
+        for i in range(comboforWin):
+            line.append(state[posx][posy+i])
+        return line
+
+    return
+
+
+def check_the_column(state, posx, posy):
+    """
+    """
+    column = []
+    if posx + (comboforWin-1) < grilles:
+        for i in range(comboforWin):
+            column.append(state[posx][posy])
+            posx+=1
+        return column
+
+    return
+
+def check_diago_bottom(state, posx, posy):
+    """
+    """
+    x = posx
+    y = posy
+    try:
+        if comboforWin == 3:
+            diagoB =  [state[x][y], state[x+1][y+1], state[x+2][y+2]]
+        elif comboforWin == 4:
+            diagoB =  [state[x][y], state[x+1][y+1], state[x+2][y+2], state[x+3][y+3]]
+        return diagoB
+    except:
+        pass
+    
+    return 
+
+def check_diago_top(state, posx, posy):
+    """
+    """
+    x = posx
+    y = posy
+    
+        
+    try:
+        if x - (comboforWin-1) >= 0 and y + (comboforwin-1) and comboforWin==3:
+            diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2]]
+        elif x - (comboforWin-1) >= 0 and y + (comboforwin-1) < grilles and comboforWin==4:
+            diagoT =  [state[x][y], state[x-1][y+1], state[x-2][y+2],state[x-3][y+3] ]
+        return diagoT
+    except:
+        pass
+    
+    return 
+
+
+def create_win_possibility(state):
+    wins_state = []
+    for x in range(len(state)):
+        for y in range(len(state)):
+            line = check_the_line(state, x, y)
+            if line:
+                wins_state.append(line)
+    
+            column = check_the_column(state, x, y)
+            if column:
+                wins_state.append(column)
+            diago_bottom = check_diago_bottom(state, x, y)
+            if diago_bottom:
+                wins_state.append(diago_bottom)
+                
+            diago_top = check_diago_top(state, x, y)
+            if diago_top:
+                wins_state.append(diago_top)
+    return wins_state
 
 def evaluate(state):
     """
@@ -55,21 +138,13 @@ def wins(state, player):
     :param player: a human or a computer
     :return: True if the player wins
     """
-    win_state = [
-        [state[0][0], state[0][1], state[0][2]], # possibilité de victoire 
-        [state[1][0], state[1][1], state[1][2]],
-        [state[2][0], state[2][1], state[2][2]],
-        [state[0][0], state[1][0], state[2][0]],
-        [state[0][1], state[1][1], state[2][1]],
-        [state[0][2], state[1][2], state[2][2]],
-        [state[0][0], state[1][1], state[2][2]],
-        [state[2][0], state[1][1], state[0][2]],
-    ]
-    if [player, player, player] in win_state:
+    win_state = create_win_possibility(state)
+    if comboforWin == 3 and [player, player, player] in win_state:
+        return True
+    elif comboforWin == 4 and [player, player, player, player] in win_state:
         return True
     else:
         return False
-
 
 def game_over(state):
     """
@@ -133,7 +208,6 @@ def minimax(state, depth, player):
     :return: a list with [the best row, best col, best score]
     """
     if player == COMP:
-       
         best = [-1, -1, -infinity]
     else:
         best = [-1, -1, +infinity]
@@ -157,7 +231,6 @@ def minimax(state, depth, player):
                 best = score  # min value
 
     return best
-
 
 def clean():
     """
@@ -199,20 +272,28 @@ def ai_turn(c_choice, h_choice):
     :param h_choice: human's choice X or O
     :return:
     """
+
     depth = len(empty_cells(board))
     if depth == 0 or game_over(board):
         return
 
     clean()
     print(f'Computer turn [{c_choice}]')
+
     render(board, c_choice, h_choice)
 
-    if depth == 9:
-        x = choice([0, 1, 2])
-        y = choice([0, 1, 2])
+
+
+    if depth == grilles*grilles:
+        x_lenght = []
+        y_lenght = []
+        for indice in range(grilles):
+            x_lenght.append(indice)
+            y_lenght.append(indice)
+        x = choice(x_lenght)
+        y = choice(y_lenght)
     else:
         move = minimax(board, depth, COMP)
-        
         x, y = move[0], move[1]
 
     set_move(x, y, COMP)
@@ -238,12 +319,11 @@ def human_turn(c_choice, h_choice):
     print(f'Human turn [{h_choice}]')
     render(board, c_choice, h_choice)
     movespossible = "Use numpad 1.." + str(grilles*grilles) + ": "
-    while move < 1 or move > (grilles*grilles):
+    while move < 1 or (move > grilles*grilles):
         try:
             move = int(input(movespossible))
             coord = moves[move]
             can_move = set_move(coord[0], coord[1], HUMAN)
-
             if not can_move:
                 print('Bad move')
                 move = -1
@@ -254,14 +334,15 @@ def human_turn(c_choice, h_choice):
             print('Bad choice')
 
 
-def gen_moves(lenght):
+def gen_moves(grilles):
     pos = 1
-    for i in range(lenght):
-        for j in range(lenght):
+    for i in range(grilles):
+        for j in range(grilles):
             moves[pos] = [i, j]
             pos += 1
   
     return moves
+
 
 def main():
     """
@@ -271,10 +352,10 @@ def main():
     h_choice = ''  # X or O
     c_choice = ''  # X or O
     first = ''  # if human is the first
-    global grilles# the dimension of grilles
+    global grilles
+    global comboforWin
 
-    # Human cooses the dimension of board
-    while grilles % 2 == 0:
+    while grilles % 2 == 0 or grilles==1:
         try:
             print('')
             grilles = int(input("Entrez un nombre impair afin de définir la taille de votre grille: "))
@@ -283,19 +364,18 @@ def main():
             exit()
         except (KeyError, ValueError):
             print('Bad choice')
+        # Human chooses X or O to play
 
-    # Setting computer's choice
+    # Create board
     for L in range(grilles):
         largeur = []
         for l in range(grilles):
             largeur.append(0)
         board.append(largeur)
-
+    
     moves = gen_moves(grilles)
+    comboforWin = genere_params_for_win(grilles)
 
-
-
-    # Human chooses X or O to play
     while h_choice != 'O' and h_choice != 'X':
         try:
             print('')
@@ -331,6 +411,7 @@ def main():
 
         human_turn(c_choice, h_choice)
         ai_turn(c_choice, h_choice)
+
 
     # Game over message
     if wins(board, HUMAN):
